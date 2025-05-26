@@ -3,12 +3,17 @@ output "acr_login_server" {
   description = "The login server URL for the Azure Container Registry"
 }
 
-output "container_group_fqdn" {
-  value       = module.mcp.container_group_fqdn
-  description = "The FQDN of the container group"
+output "web_app_url" {
+  value       = "https://${module.mcp_server.default_site_hostname}"
+  description = "The URL of the web app"
 }
 
-output "container_group_ip_address" {
-  value       = module.mcp.container_group_ip_address
-  description = "The IP address of the container group"
+output "web_app_name" {
+  value       = module.mcp_server.web_app_name
+  description = "The name of the web app"
+}
+
+output "web_app_outbound_ip_addresses" {
+  value       = module.mcp_server.outbound_ip_addresses
+  description = "The outbound IP addresses of the web app"
 }
