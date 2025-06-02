@@ -1,8 +1,8 @@
 resource "azurerm_linux_web_app" "server" {
   name                = "${var.name}"
   resource_group_name = var.rg_name
-  location            = azurerm_service_plan.api.location
-  service_plan_id     = azurerm_service_plan.api.id
+  location            = var.default_location
+  service_plan_id     = var.app_plan_id
 
   virtual_network_subnet_id = var.subnet_id
 

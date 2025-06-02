@@ -24,3 +24,8 @@ variable "subnet_id" {
   type = string
   description = "ID of the subnet where the app will be deployed."
 }
+
+variable "app_plan_id" {
+  type = string
+  description = "ID of the App Service Plan where the app will be hosted."
+}

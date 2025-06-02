@@ -36,3 +36,34 @@ resource "azurerm_subnet_network_security_group_association" "frontend" {
   network_security_group_id  = azurerm_network_security_group.main.id
   subnet_id                  = azurerm_subnet.frontend.id
 }
+
+# Create allow rules for each provided IP address
+resource "azurerm_network_security_rule" "allow_specific_ips" {
+  count                       = length(var.allowed_ips)
+  name                        = "allow-ip-${count.index}"
+  priority                    = 100 + count.index
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "8000"
+  source_address_prefix       = "${var.allowed_ips[count.index]}"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.rg_name
+  network_security_group_name = azurerm_network_security_group.main.name
+}
+
+# Deny all other traffic to port 8000
+resource "azurerm_network_security_rule" "deny_all" {
+  name                        = "deny-all-port-8000"
+  priority                    = 4000
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "8000"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.rg_name
+  network_security_group_name = azurerm_network_security_group.main.name
+}

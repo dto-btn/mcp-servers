@@ -20,6 +20,7 @@ module "vnet" {
   default_location = var.default_location
   name     = "br-mcp-server"
   rg_name          = azurerm_resource_group.main.name
+  allowed_ips = var.allowed_ips
 }
 
 module "br-mcp-server" {
@@ -28,6 +29,7 @@ module "br-mcp-server" {
   default_location    = var.default_location
   rg_name = azurerm_resource_group.main.name
   name            = "br-mcp-server-app"
+  app_plan_id = azurerm_service_plan.mcp_plan.id
   
 # aplication settings
   app_settings = {

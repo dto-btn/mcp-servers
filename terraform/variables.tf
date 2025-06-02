@@ -32,3 +32,9 @@ variable "bits_database_config" {
   default = null
   sensitive = true
 }
+
+variable "allowed_ips" {
+  description = "List of IP addresses allowed to access the MCP server on port 8000"
+  type        = list(string)
+  default     = []
+}
