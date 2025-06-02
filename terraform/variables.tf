@@ -20,3 +20,15 @@ variable "allowed_origins" {
   type        = list(string)
   default     = ["*"]
 }
+
+variable "bits_database_config" {
+  description = "Configuration for the database connection"
+  type = object({
+    URL      = string
+    DB_NAME  = string
+    USERNAME = string
+    PASSWORD = string
+  })
+  default = null
+  sensitive = true
+}

@@ -6,33 +6,37 @@ resource "azurerm_resource_group" "main" {
   location = var.default_location
 }
 
+resource "azurerm_service_plan" "mcp_plan" {
+  name                = "br-mcp-server-app-plan"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.default_location
+  sku_name            = "S1"
+  os_type             = "Linux"
+}
+
+module "vnet" {
+  source = "./modules/vnet"
+
+  default_location = var.default_location
+  name     = "br-mcp-server"
+  rg_name          = azurerm_resource_group.main.name
+}
+
 module "br-mcp-server" {
   source = "./modules/mcp-server"
 
   default_location    = var.default_location
-  resource_group_name = azurerm_resource_group.main.name
-  app_name            = "br-mcp-server-app"
+  rg_name = azurerm_resource_group.main.name
+  name            = "br-mcp-server-app"
   
-  # Access restrictions
-  frontend_app_ip      = var.frontend_app_ip
-  developer_ip_addresses = var.developer_ip_addresses
-  allowed_origins      = var.allowed_origins
-  
-  # ACR credentials
-  acr_admin_username = azurerm_container_registry.acr.admin_username
-  acr_admin_password = azurerm_container_registry.acr.admin_password
-  acr_login_server   = azurerm_container_registry.acr.login_server
-  
-  # Application settings
+# aplication settings
   app_settings = {
-    ENV = "production"
-    PORT = "8000"
-    WEBSITES_PORT = "8000"
-    WEBSITE_HTTPLOGGING_RETENTION_DAYS = "30"
+    BITS_DB_SERVER   = var.bits_database_config.URL
+    BITS_DB_DATABASE = var.bits_database_config.DB_NAME
+    BITS_DB_USERNAME = var.bits_database_config.USERNAME
+    BITS_DB_PWD      = var.bits_database_config.PASSWORD
   }
   
-  # Source code repository
-  repo_url = "https://github.com/dto-btn/br-mcp-server"
-  branch   = "main"
+  subnet_id = module.vnet.subnet_id
 
 }
