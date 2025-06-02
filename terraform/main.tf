@@ -28,7 +28,7 @@ module "br-mcp-server" {
     ENV = "production"
     PORT = "8000"
     WEBSITES_PORT = "8000"
-    WEBSITE_HTTPLOGGING_RETENTION_DAYS = "7"
+    WEBSITE_HTTPLOGGING_RETENTION_DAYS = "30"
   }
   
   # Source code repository
