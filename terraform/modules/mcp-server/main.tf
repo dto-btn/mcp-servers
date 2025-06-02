@@ -17,11 +17,12 @@ resource "azurerm_linux_web_app" "server" {
     }
     use_32_bit_worker = false
 
-    #app_command_line = "gunicorn --bind=0.0.0.0 app:app"
+    app_command_line = "python server.py"
   }
 
   app_settings = merge({
     PORT = "8000"
+    SCM_DO_BUILD_DURING_DEPLOYMENT = "true"
   }, var.app_settings)
 }
 
