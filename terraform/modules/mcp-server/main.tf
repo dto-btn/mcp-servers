@@ -23,6 +23,7 @@ resource "azurerm_linux_web_app" "server" {
   app_settings = merge({
     PORT = "8000"
     SCM_DO_BUILD_DURING_DEPLOYMENT = "true"
+    TRUSTED_HOST = "${var.name}.azurewebsites.net"
   }, var.app_settings)
 }
 

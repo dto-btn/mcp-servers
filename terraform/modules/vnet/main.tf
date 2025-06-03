@@ -46,7 +46,7 @@ resource "azurerm_network_security_rule" "allow_specific_ips" {
   access                      = "Allow"
   protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = "8000"
+  destination_port_range      = "443"
   source_address_prefix       = "${var.allowed_ips[count.index]}"
   destination_address_prefix  = "*"
   resource_group_name         = var.rg_name
@@ -55,13 +55,13 @@ resource "azurerm_network_security_rule" "allow_specific_ips" {
 
 # Deny all other traffic to port 8000
 resource "azurerm_network_security_rule" "deny_all" {
-  name                        = "deny-all-port-8000"
+  name                        = "deny-all-port-443"
   priority                    = 4000
   direction                   = "Inbound"
   access                      = "Deny"
   protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = "8000"
+  destination_port_range      = "443"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = var.rg_name
