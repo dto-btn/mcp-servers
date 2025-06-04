@@ -18,6 +18,23 @@ resource "azurerm_linux_web_app" "server" {
     use_32_bit_worker = false
 
     app_command_line = "python server.py"
+
+    dynamic "ip_restriction" {
+      for_each = var.allowed_ips
+      content {
+        ip_address = "${ip_restriction.value}/32"
+        action     = "Allow"
+        priority   = 100 + ip_restriction.key
+        name       = "AllowIP${ip_restriction.key}"
+      }
+    }
+
+    ip_restriction {
+      ip_address = "0.0.0.0/0"
+      action     = "Deny"
+      priority   = 1000
+      name       = "DenyAll"
+    }
   }
 
   app_settings = merge({

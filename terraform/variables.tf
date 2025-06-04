@@ -3,18 +3,6 @@ variable "default_location" {
     default = "canadacentral"
 }
 
-variable "frontend_app_ip" {
-  description = "IP address of the frontend application that should be allowed to access"
-  type        = string
-  default     = "0.0.0.0"
-}
-
-variable "developer_ip_addresses" {
-  description = "List of developer IP addresses allowed to access the app"
-  type        = list(string)
-  default     = []
-}
-
 variable "allowed_origins" {
   description = "List of origins allowed for CORS"
   type        = list(string)
@@ -34,7 +22,7 @@ variable "bits_database_config" {
 }
 
 variable "allowed_ips" {
-  description = "List of IP addresses allowed to access the MCP server on port 8000"
+  description = "List of IP addresses allowed to access the MCP server on port 8000, this is devs only"
   type        = list(string)
   default     = []
 }

@@ -14,13 +14,22 @@ resource "azurerm_service_plan" "mcp_plan" {
   os_type             = "Linux"
 }
 
+data "azurerm_linux_web_app" "dev-ssca" {
+  name                = "ssc-assistant-dev"
+  resource_group_name = "ScSc-CIO_ECT_ssc_assistant_dev-rg"
+}
+
+data "azurerm_linux_web_app" "prod-ssca" {
+  name                = "ssc-assistant"
+  resource_group_name = "ScSc-CIO_ECT_ssc_assistant-rg"
+}
+
 module "vnet" {
   source = "./modules/vnet"
 
   default_location = var.default_location
   name     = "br-mcp-server"
   rg_name          = azurerm_resource_group.main.name
-  allowed_ips = var.allowed_ips
 }
 
 module "br-mcp-server" {
@@ -30,7 +39,8 @@ module "br-mcp-server" {
   rg_name = azurerm_resource_group.main.name
   name            = "br-mcp-server-app"
   app_plan_id = azurerm_service_plan.mcp_plan.id
-  
+  allowed_ips = concat(var.allowed_ips, data.azurerm_linux_web_app.dev-ssca.possible_outbound_ip_address_list, data.azurerm_linux_web_app.prod-ssca.possible_outbound_ip_address_list)
+
 # aplication settings
   app_settings = {
     BITS_DB_SERVER   = var.bits_database_config.URL

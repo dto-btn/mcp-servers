@@ -29,3 +29,9 @@ variable "app_plan_id" {
   type = string
   description = "ID of the App Service Plan where the app will be hosted."
 }
+
+variable "allowed_ips" {
+  description = "List of IP addresses allowed to access the MCP server on port 8000"
+  type        = list(string)
+  default     = []
+}
