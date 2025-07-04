@@ -52,3 +52,16 @@ module "br-mcp-server" {
   subnet_id = module.vnet.subnet_id
 
 }
+
+module "rag-mcp-server" {
+  source = "./modules/mcp-server"
+
+  default_location    = var.default_location
+  rg_name = azurerm_resource_group.main.name
+  name            = "rag-mcp-server-app"
+  app_plan_id = azurerm_service_plan.mcp_plan.id
+  allowed_ips = concat(var.allowed_ips, data.azurerm_linux_web_app.dev-ssca.possible_outbound_ip_address_list, data.azurerm_linux_web_app.prod-ssca.possible_outbound_ip_address_list)
+  
+  subnet_id = module.vnet.subnet_id
+
+}
